@@ -101,6 +101,16 @@ void main(void) {
                 PHASE1 = 2303;
                 PDC1 = 92;
             }
+            if(rxval[i] == 'R')
+            {
+                PHASE2 = 2303;
+                PDC2 = 253;
+            }
+            else if(rxval[i] == 'L')
+            {
+                PHASE2 = 2303;
+                PDC2 = 92;
+            }
         }
         /*
         for(i = 0; i < 100; i++)
