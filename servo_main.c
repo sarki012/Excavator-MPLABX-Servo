@@ -58,7 +58,7 @@
 
 void __attribute__((__interrupt__, auto_psv)) _U2RXInterrupt(void);
 int x = 0;
-char rxval[20];
+char rxval[15];
 int curl = 0, boom = 0;
 void servo_init(void);
 int char_to_int(char digit2, char digit1, char digit0);
@@ -67,16 +67,16 @@ void __attribute__((__interrupt__, auto_psv)) _U2RXInterrupt(void)
     IFS1bits.U2RXIF = 0;
     rxval[x] = U2RXREG;
     x++;
-    if(x == 20)
+    if(x == 15)
     {  
         x = 0;
     }
     return;
  }
 void main(void) {
-    int i = 0, j = 0;
+    int i = 0, j = 0, k = 0;
     servo_init();
-    for(i = 0; i < 20; i++)
+    for(i = 0; i < 15; i++)
     {
         rxval[i] = 0;
     }
@@ -91,7 +91,7 @@ void main(void) {
     //PHASE2 = 2303;
     while(1)
     {
-        for(i = 0; i < 20; i++)
+        for(i = 0; i < 10; i++)
         {
             if(rxval[i] == 'c')
             {
@@ -104,6 +104,7 @@ void main(void) {
                 //Min Duty Cycle is PDC = 92
                 PHASE3 = 2303;
                 PDC3 = (int)(172.5 + 0.947*curl);
+          //      for(j = 0; j < 500; j++);
             }
             else if(rxval[i] == 'b')
             {
@@ -116,9 +117,10 @@ void main(void) {
                 //Min Duty Cycle is PDC = 92
                 PHASE1 = 2303;
                 PDC1 = (int)(172.5 + 0.947*boom);
-                for(j = 0; j < 5000; j++);
+            //    for(j = 0; j < 500; j++);
             }
         }
+        for(j = 0; j < 500; j++);
     }
     return;
 }
