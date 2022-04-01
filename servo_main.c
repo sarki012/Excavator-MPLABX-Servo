@@ -58,7 +58,7 @@
 
 void __attribute__((__interrupt__, auto_psv)) _U2RXInterrupt(void);
 int x = 0;
-char rxval[15];
+char rxval[20];
 int curl = 0, boom = 0;
 void servo_init(void);
 int char_to_int(char digit2, char digit1, char digit0);
@@ -67,7 +67,7 @@ void __attribute__((__interrupt__, auto_psv)) _U2RXInterrupt(void)
     IFS1bits.U2RXIF = 0;
     rxval[x] = U2RXREG;
     x++;
-    if(x == 15)
+    if(x == 20)
     {  
         x = 0;
     }
@@ -76,7 +76,7 @@ void __attribute__((__interrupt__, auto_psv)) _U2RXInterrupt(void)
 void main(void) {
     int i = 0, j = 0, k = 0;
     servo_init();
-    for(i = 0; i < 15; i++)
+    for(i = 0; i < 20; i++)
     {
         rxval[i] = 0;
     }
@@ -91,19 +91,19 @@ void main(void) {
     //PHASE2 = 2303;
     while(1)
     {
-        for(i = 0; i < 10; i++)
+        for(i = 0; i < 15; i++)
         {
             if(rxval[i] == 'c')
             {
                 curl = char_to_int(rxval[i+1], rxval[i+2], rxval[i+3]);
-                //Motor Arithemetic Here
+                //Motor Arithmitic Here
                 //PHASE3 and PDC3 are for PWM3L, the bucket curl motor
                 //PHASE is always 2303 to give a rising edge every 20ms
                 //Max Duty Cycle is PDC = 253
                 //Neutral Duty Cycle is 173
                 //Min Duty Cycle is PDC = 92
                 PHASE3 = 2303;
-                PDC3 = (int)(172.5 + 0.947*curl);
+                PDC3 = (int)(172.5 + curl);
           //      for(j = 0; j < 500; j++);
             }
             else if(rxval[i] == 'b')
@@ -116,11 +116,11 @@ void main(void) {
                 //Neutral Duty Cycle is 173
                 //Min Duty Cycle is PDC = 92
                 PHASE1 = 2303;
-                PDC1 = (int)(172.5 + 0.947*boom);
+                PDC1 = (int)(172.5 + boom);
             //    for(j = 0; j < 500; j++);
             }
         }
-        for(j = 0; j < 500; j++);
+ //       for(j = 0; j < 25000; j++);
     }
     return;
 }
