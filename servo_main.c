@@ -74,7 +74,7 @@ void __attribute__((__interrupt__, auto_psv)) _U2RXInterrupt(void)
     return;
  }
 void main(void) {
-    int i = 0, j = 0, k = 0;
+    int i = 0, j = 0, k = 0, count = 0;
     servo_init();
     for(i = 0; i < 20; i++)
     {
@@ -104,7 +104,14 @@ void main(void) {
                 //Min Duty Cycle is PDC = 92
                 PHASE3 = 2303;
                 PDC3 = (int)(172.5 + curl);
-          //      for(j = 0; j < 500; j++);
+                count++;
+                if(count == 2)
+                {
+                    count = 0;
+                    break;
+                }
+         //       for(j = 0; j < 10000; j++);
+               // for(j = 0; j < 5000; j++);
             }
             else if(rxval[i] == 'b')
             {
@@ -117,10 +124,15 @@ void main(void) {
                 //Min Duty Cycle is PDC = 92
                 PHASE1 = 2303;
                 PDC1 = (int)(172.5 + boom);
-            //    for(j = 0; j < 500; j++);
+                count++;
+                if(count == 2)
+                {
+                    count = 0;
+                    break;
+                }
             }
         }
- //       for(j = 0; j < 25000; j++);
+        
     }
     return;
 }
